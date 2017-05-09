@@ -1,3 +1,12 @@
+################################################
+# Script for transform TXT annotation 
+# file to a XML, adding some information of
+# the image. made for Faster R-CNN training on
+# Imagenet dataset 
+# Created by Simone Grazioso, April 2017
+################################################
+
+
 import xml.etree.cElementTree as ET
 import glob, os
 
