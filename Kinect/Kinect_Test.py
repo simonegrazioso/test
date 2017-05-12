@@ -19,7 +19,6 @@ if __name__ == "__main__":
 	while 1:
 		# quit program when 'esc' key is pressed
 		k = cv2.waitKey(5) & 0xFF
-		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
 			break
 		#get a frame from RGB camera
