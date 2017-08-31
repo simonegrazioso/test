@@ -51,46 +51,36 @@ if __name__ == '__main__':
         )
         depth_stream.start()
 
-    print("**** Press R to start Recording ****\n"
-          "***** Press S for a Screenshot *****\n"
+    print("***** Press S for a Screenshot *****\n"
           "********** Press Q to Quit *********\n")
     done = False
     recording = False
+    screen = 0
     while not done:
         frame = get_video(color_stream)
         if recording_mode_rgbd is True:
             depth = get_depth(depth_stream)
             # apply colormap to depth
-            depth = cv2.applyColorMap(depth.astype(np.uint8),
-                                      cv2.COLORMAP_BONE)
+            depth2 = cv2.applyColorMap(depth.astype(np.uint8),
+                                       cv2.COLORMAP_BONE)
             # concatenate rgb and depth along y axis
-            vis = np.concatenate((frame, depth), axis=1)
+            vis = np.concatenate((frame, depth2), axis=1)
         else:
             vis = frame
 
         cv2.imshow('{} Data'.format(string_file), vis)
 
         keypress = cv2.waitKey(1)
-        if keypress & 0xFF == ord('r'):
-            if recording is not True:
-                recording = True
-                filename = time.strftime(
-                    "%Y.%m.%d-%H.%M.%S_{}_Data".format(string_file))
-                rec = openni2.Recorder("oni/{}.oni".format(filename))
-                rec.attach(color_stream, allow_lossy_compression=True)
-                if recording_mode_rgbd is True:
-                    rec.attach(depth_stream, allow_lossy_compression=True)
-                rec.start()
-                print("Recording... Press R again to stop")
-            else:
-                recording = False
-                rec.stop()
-                print("*** Saved {}.oni ***".format(filename))
-        elif keypress & 0xFF == ord('s'):
-            screen = time.strftime(
-                "%Y.%m.%d-%H.%M.%S_{}_Data".format(string_file))
-            cv2.imwrite("images/{}.png".format(screen), frame)
+        if keypress & 0xFF == ord('s'):
+            # screen = time.strftime(
+            #    "%Y.%m.%d-%H.%M.%S_{}_Data".format(string_file))q
+            cv2.imwrite("/home/simone/images/{}.png".format(screen), frame)
+            cv2.imwrite(
+                "/home/simone/images/{}-depth.png".format(screen), depth)
+            cv2.imwrite(
+                "/home/simone/images/{}-depth2.tiff".format(screen), depth)
             print("Screen saved at images/{}.png".format(screen))
+            screen = screen + 1
         elif keypress & 0xFF == ord('q'):
             done = True
             print("Quit.")
